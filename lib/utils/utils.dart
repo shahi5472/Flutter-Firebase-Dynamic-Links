@@ -6,11 +6,14 @@ class Utils {
     required int id,
     required String title,
     String? image,
+    String? route,
   }) async {
     String url = 'https://shahidynamic.page.link';
+    String content = 'invite?id=$id&route=$route';
+
     final params = DynamicLinkParameters(
       uriPrefix: url,
-      link: Uri.parse('$url/$id'),
+      link: Uri.parse('$url/$content'),
       androidParameters: const AndroidParameters(
         packageName: "com.shahi.flutter_dynamic_links",
         minimumVersion: 0,

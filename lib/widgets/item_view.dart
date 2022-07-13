@@ -38,6 +38,7 @@ class ItemView extends StatelessWidget {
           id: id,
           title: title,
           image: imageUrl,
+          route: id.isEven ? "profile" : "details",
         ),
         icon: const Icon(Icons.share),
       ),
