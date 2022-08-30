@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter_dynamic_links/screens/details_view.dart';
 
+import '../model/dynamic_link_model.dart';
+
 class HomeController extends GetxController {
   RxBool isLoading = true.obs;
   RxBool isError = false.obs;
@@ -64,28 +66,35 @@ class HomeController extends GetxController {
 
     if (data != null) {
       print("Data Link :: ${data.link.path}");
-      final Uri? uri = data.link;
+      final Uri uri = data.link;
       print("Uri :: $uri");
-      if (uri != null) {
-        final queryParams = uri.queryParameters;
-        if (queryParams.isNotEmpty) {
-          String? id = queryParams["id"];
-          String? route = queryParams["route"];
-          print("Id is :: $id");
-          print("Route is :: $route");
+      final queryParams = uri.queryParameters;
+      if (queryParams.isNotEmpty) {
+        dynamic mapData = queryParams["data"];
 
-          Get.snackbar(
-            "Id => $id :: Route => $route",
-            "Links => ${data.link}",
-            icon: const Icon(Icons.link),
-            snackPosition: SnackPosition.BOTTOM,
-          );
+        print("Type :: ${mapData.runtimeType}");
+        print("Data :: $mapData");
 
-          if (route == 'profile') {
-            Get.to(const ProfileView());
-          } else {
-            Get.to(DetailsView(id: '$id'));
-          }
+        DynamicLinkModel dynamicLinkModel = dynamicLinkModelFromJson(mapData);
+        print("+=======================================+");
+        print("Map Id is :: ${dynamicLinkModel.id}");
+        print("Map Route is :: ${dynamicLinkModel.route}");
+        print("Map Route is :: ${dynamicLinkModel.api}");
+        print("Map Route is :: ${dynamicLinkModel.image}");
+        print("Map Route is :: ${dynamicLinkModel.pageType}");
+        print("-=======================================-");
+
+        Get.snackbar(
+          "Id => ${dynamicLinkModel.id} :: Route => ${dynamicLinkModel.route}",
+          "Links => ${data.link}",
+          icon: const Icon(Icons.link),
+          snackPosition: SnackPosition.BOTTOM,
+        );
+
+        if (dynamicLinkModel.route == 'profile') {
+          Get.to(const ProfileView());
+        } else {
+          Get.to(DetailsView(id: '${dynamicLinkModel.id}', data: uri));
         }
       }
     }

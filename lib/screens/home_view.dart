@@ -38,6 +38,7 @@ class _HomeViewState extends State<HomeView> {
                         index: index,
                         title: model.title.toString(),
                         subTitle: model.body.toString(),
+                        model: model,
                       );
                     },
                   ),
